@@ -1,15 +1,17 @@
 # PyFormatJS
-I've always liked [Python's format functionality](https://docs.python.org/3.4
-/library/string.html#format-string-syntax), and always found annoying and ugly
-having to concatenate things manually in JavaScript, especially when you had to
-concatenate the same thing multiple times.
+I've always liked [Python's format
+functionality](https://docs.python.org/3.4/library/string.html#format-string-syntax)
+, and always found annoying and ugly having to concatenate things manually in
+JavaScript, especially when you had to concatenate the same thing multiple
+times.
 
 For that reason, I decided to try and implement Python's format as closely as
 possible in JavaScript.
 
-This started off as [this Gist I created](https://gist.github.com/Sighery
-/feddf87a45215ead08ae8c3321a2083d), from taking the code from [this Stack
-Overflow answer](https://stackoverflow.com/a/4673436).
+This started off as [this Gist I
+created](https://gist.github.com/Sigheryfeddf87a45215ead08ae8c3321a2083d), from
+taking the code from [this Stack Overflow
+answer](https://stackoverflow.com/a/4673436).
 
 That answer was a good starting point, but it would take the same amount of
 arguments as the replacement fields, meaning that if you wanted a single
@@ -30,7 +32,7 @@ prototype to add this format method so every string has it. So far it supports:
 1. Automatic conversion of types
 
 ```Javascript
-"{} + {} is {}".format(1, 1.5, 1 + 1.5);
+"{} + {} is {}".pyformat(1, 1.5, 1 + 1.5);
 // Would return: "1 + 1.5 is 2.5"
 ```
 
@@ -40,7 +42,7 @@ it can act funky sometimes. For instance, if you were to pass it a function
 you'd get no error, just this:
 
 ```Javascript
-"{}".format(function() {});
+"{}".pyformat(function() {});
 // Would return: "function() {}"
 ```
 
@@ -51,7 +53,7 @@ give it and replace it literally on the input string if possible.
 2. Manual field specification
 
 ```Javascript
-"{0} multiplied by {1} is still {0}".format(10, 1);
+"{0} multiplied by {1} is still {0}".pyformat(10, 1);
 // Would return: "10 multiplied by 1 is still 10"
 ```
 
@@ -59,7 +61,7 @@ give it and replace it literally on the input string if possible.
 
 ```Javascript
 // This is technically the same as "Good morning, {0} {1}"
-"Good morning, {} {}".format("Mr.", "Smith");
+"Good morning, {} {}".pyformat("Mr.", "Smith");
 // Would return: "Good morning, Mr. Smith"
 ```
 
@@ -69,7 +71,7 @@ As in Python, you can use `{{}}` to escape your square brackets so they aren't
 matched and replaced.
 
 ```JavaScript
-"You can pass in named arguments by using {{argName}}".format('test');
+"You can pass in named arguments by using {{argName}}".pyformat('test');
 // Will not replace and will return:
 // "You can pass in named arguments by using {argName}"
 ```
@@ -79,7 +81,7 @@ matched and replaced.
 This is one of Python's implementation I quite like. On Python, you can do this:
 
 ```Python
-"This is {city}!".format(city = "Sparta")
+"This is {city}!".pyformat(city = "Sparta")
 # Would return: "This is Sparta!"
 ```
 
@@ -87,14 +89,14 @@ However, JavaScript does not implement named arguments. A function does not
 know the name of a given argument, it just knows its value. That is why, in
 order to implement this feature in JavaScript I decided to go a different route.
 
-The way this `format()` works in regards to named arguments, is that it will try
+The way this `pyformat()` works in regards to named arguments, is that it will try
 to find an object as the last argument given to it. If it can find it, then it
 will be able to replace your named replacement fields in your input string.
 
 Which means you'd do this to use named arguments:
 
 ```Javascript
-"{team1} ({0} : {0}) {team2}".format(20, {
+"{team1} ({0} : {0}) {team2}".pyformat(20, {
 	team1: "Atlanta Hawks",
 	team2: "Boston Celtics"
 });
@@ -119,8 +121,8 @@ So for instance, some things that can and will throw errors:
 
 Python does simply not allow mixing these two types. If you want to use either
 positional or named arguments, you won't be able to use just `{}` later on in
-the string and let `format()` try and figure out what argument is supposed to go
-there. If you do try, it will throw a `ValueError`.
+the string and let `pyformat()` try and figure out what argument is supposed to
+go there. If you do try, it will throw a `ValueError`.
 
 2. Invalid escaping
 
@@ -145,5 +147,5 @@ missing.
 # TODO
 
 This is just the first version. So far it does the basic replacing, but it does
-none of the formatting Python's `format()` does. That will come at some point
+none of the formatting Python's `pyformat()` does. That will come at some point
 when I get to it.

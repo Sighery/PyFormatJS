@@ -1,4 +1,4 @@
-String.prototype.format = function() {
+String.prototype.pyformat = function() {
 	// Constants
 	var FIELD_TYPE_AUTOMATIC = 0;
 	var FIELD_TYPE_MANUAL = 1;
@@ -12,7 +12,7 @@ String.prototype.format = function() {
 	function checkIfArgExistsOrError(args, index) {
 		// Check if the given arg to replace for even exists or throw error
 		if (typeof args[index] === 'undefined') {
-			throw new IndexError(MISSING_ARG_MSG.format(index));
+			throw new IndexError(MISSING_ARG_MSG.pyformat(index));
 		}
 	}
 
@@ -84,7 +84,7 @@ String.prototype.format = function() {
 			// It wasn't a number so just assume it was a named argument. First
 			// check if it even exists or else throw an error
 			if (namedArgs.hasOwnProperty(strippedField) === false) {
-				throw new KeyError(MISSING_KEY_MSG.format(strippedField));
+				throw new KeyError(MISSING_KEY_MSG.pyformat(strippedField));
 			} else {
 				return namedArgs[strippedField];
 			}
