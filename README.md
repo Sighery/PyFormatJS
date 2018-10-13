@@ -120,13 +120,13 @@ So for instance, some things that can and will throw errors:
 Python does simply not allow mixing these two types. If you want to use either
 positional or named arguments, you won't be able to use just `{}` later on in
 the string and let `format()` try and figure out what argument is supposed to go
-there.
+there. If you do try, it will throw a `ValueError`.
 
 2. Invalid escaping
 
 Obviously, if you try to just make it break by passing in square brackets not
-escaped correctly it will just throw an error at you saying your string has the
-squared brackets escaped wrong.
+escaped correctly it will just throw a `ValueError` at you saying your string
+has the squared brackets escaped wrong.
 
 3. Index and key errors
 
