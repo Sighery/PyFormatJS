@@ -1,31 +1,133 @@
-String.prototype.pyformat = function() {
-	// Constants
-	var FIELD_TYPE_AUTOMATIC = 0;
-	var FIELD_TYPE_MANUAL = 1;
-	// Error messages
-	var MIXED_FIELDS_MSG = "Cannot switch between automatic field "
-							+ "numbering and manual field specification";
-	var INVALID_ESCAPE_MSG = "Single '}' encountered in format string";
-	var MISSING_KEY_MSG = "Missing key '{}'";
-	var MISSING_ARG_MSG = "Missing argument for replacement field {}";
-	// Util functions
-	function checkIfArgExistsOrError(args, index) {
-		// Check if the given arg to replace for even exists or throw error
-		if (typeof args[index] === 'undefined') {
-			throw new IndexError(MISSING_ARG_MSG.pyformat(index));
+(function(){
+// Constants
+const FIELD_TYPE_AUTOMATIC = 0;
+const FIELD_TYPE_MANUAL = 1;
+const PATH_TYPE_ARRAY_INDEX = 0;
+const PATH_TYPE_OBJ_ATTR = 1;
+const PATH_TYPE_DICT_KEY = 2;
+// Error messages
+let MIXED_FIELDS_MSG = "Cannot switch between automatic field "
+						+ "numbering and manual field specification";
+let INVALID_ESCAPE_MSG = "Single '}' encountered in format string";
+let MISSING_KEY_MSG = "Missing key '{}'";
+let MISSING_ARG_MSG = "Missing argument for replacement field {}";
+let INVALID_ARG_MSG = "Invalid argument '{}' in format string";
+let INVALID_LIST_INDEX_MSG = 'Array indices must be integers, not strings';
+let OUT_OF_RANGE_INDEX_MSG = 'Array index out of range';
+// Util functions
+function checkIfArgExistsOrError(args, index) {
+	// Check if the given arg to replace for even exists or throw error
+	if (typeof args[index] === 'undefined') {
+		throw new IndexError(MISSING_ARG_MSG.pyformat(index));
+	}
+}
+
+function isInt(testString) {
+	if (/^\d+$/.test(testString) === true) {
+		return true;
+	}
+
+	return false;
+}
+
+function separatePaths(path, pathType) {
+	// Types of path:
+	// 0 - Array index: [1][0][2]
+	// 1 - Object attribute: .name.lastName
+	// 2 - Dictionary key: [name][lastName]
+	let splittedPath = [];
+	let startIndex = 0;
+	let endIndex = path.length - 1;
+
+	if (pathType === PATH_TYPE_ARRAY_INDEX) {
+		while(startIndex < endIndex) {
+			let startListIndex = path.indexOf('[', startIndex);
+			let endListIndex = path.indexOf(']', startIndex);
+
+			if (startListIndex === -1 && endListIndex === -1) {
+				break;
+			} else if (startListIndex === -1) {
+				throw new KeyError(MISSING_KEY_MSG.pyformat(
+					path.substring(startIndex)
+				));
+			} else if (endListIndex === -1) {
+				throw new ValueError(INVALID_ARG_MSG.pyformat(
+					path.substring(startIndex)
+				));
+			}
+
+			let pathElem = path.substring(startListIndex + 1, endListIndex);
+
+			if (!isInt(pathElem)) {
+				throw new TypeError(INVALID_LIST_INDEX_MSG);
+			}
+
+			splittedPath.push(parseInt(pathElem, 10));
+
+			startIndex = endListIndex + 1;
 		}
 	}
 
+	return splittedPath;
+}
 
-	var args = Array.from(arguments);
-	var firstRun = true;
-	var fieldType;
+function accessArrayIndexOrError(arg, path) {
+	let finalValue;
+
+	let splittedPath = separatePaths(path, PATH_TYPE_ARRAY_INDEX);
+	finalValue = arg;
+
+	for (let step of splittedPath) {
+		if (typeof finalValue[step] === 'undefined') {
+			throw new IndexError(OUT_OF_RANGE_INDEX_MSG);
+		}
+
+		finalValue = finalValue[step];
+	}
+
+	return finalValue;
+}
+
+function accessElementKeyOrError(arg, path) {
+	// In Python dictionaries (known as hash maps in other languages) are
+	// different from objects. So in Python {.name} access object attributes
+	// while {{name}} access dictionary keys (this one can be chained).
+	// Since in JavaScript both are the same thing, let's make both methods
+	// work
+
+}
+
+// Error classes for exceptions
+class ValueError extends Error {
+	constructor(msg) {
+		super(msg);
+		this.name = "ValueError";
+	}
+}
+
+class KeyError extends Error {
+	constructor(msg) {
+		super(msg);
+		this.name = "KeyError";
+	}
+}
+
+class IndexError extends Error {
+	constructor(msg) {
+		super(msg);
+		this.name = "IndexError";
+	}
+}
+
+String.prototype.pyformat = function(...args) {
+	let firstRun = true;
+	let fieldType;
 	// In case of automatic field numbering, keep a count to know the next
 	// argument to use for the next replacement
-	var count = 0;
+	let count = 0;
 	// Since JavaScript has no named arguments like Python does, I'll implement
 	// that feature as the last argument being an object with those named args
-	var namedArgs = {};
+	let namedArgs = {};
 
 	if (args[args.length - 1] instanceof Object &&
 	args[args.length - 1].constructor === Object) {
@@ -35,7 +137,7 @@ String.prototype.pyformat = function() {
 
 
 	return this.replace(/(\{{1,}.*?\}{1,})/g, function(match, number) {
-		var strippedField = match.substr(1, match.length - 2);
+		let strippedField = match.substring(1, match.length - 1);
 
 		// If even stripped it still contains more {} inside, it means they
 		// want this one NOT replaced. {{}} used to escape.
@@ -73,13 +175,16 @@ String.prototype.pyformat = function() {
 
 		if (fieldType === FIELD_TYPE_MANUAL) {
 			// Check if it's a number field
-			if (/^\d+$/.test(strippedField) === true) {
-				var index = parseInt(strippedField, 10);
+			if (isInt(strippedField)) {
+				let index = parseInt(strippedField, 10);
 
 				checkIfArgExistsOrError(args, index);
 
 				return args[index];
 			}
+
+			// It wasn't a number. So it's likely some kind of special syntax
+			// First try list index syntax
 
 			// It wasn't a number so just assume it was a named argument. First
 			// check if it even exists or else throw an error
@@ -91,26 +196,4 @@ String.prototype.pyformat = function() {
 		}
 	});
 }
-
-
-
-class ValueError extends Error {
-	constructor(msg) {
-		super(msg);
-		this.name = "ValueError";
-	}
-}
-
-class KeyError extends Error {
-	constructor(msg) {
-		super(msg);
-		this.name = "KeyError";
-	}
-}
-
-class IndexError extends Error {
-	constructor(msg) {
-		super(msg);
-		this.name = "IndexError";
-	}
-}
+})();
