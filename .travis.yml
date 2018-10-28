@@ -4,5 +4,7 @@ node_js:
 jobs:
   include:
     - stage: "Lint"
-      name: "JSHint"
-      script: "npm run jshint"
+      name: "ESLint"
+      script: "npm run eslint"
+    - stage: "Mocha Tests"
+      script: "npm run mocha"
