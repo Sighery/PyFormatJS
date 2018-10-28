@@ -3,8 +3,8 @@ String.prototype.pyformat = function() {
 	var FIELD_TYPE_AUTOMATIC = 0;
 	var FIELD_TYPE_MANUAL = 1;
 	// Error messages
-	var MIXED_FIELDS_MSG = "Cannot switch between automatic field "
-							+ "numbering and manual field specification";
+	var MIXED_FIELDS_MSG = "Cannot switch between automatic field " +
+							"numbering and manual field specification";
 	var INVALID_ESCAPE_MSG = "Single '}' encountered in format string";
 	var MISSING_KEY_MSG = "Missing key '{}'";
 	var MISSING_ARG_MSG = "Missing argument for replacement field {}";
@@ -90,7 +90,7 @@ String.prototype.pyformat = function() {
 			}
 		}
 	});
-}
+};
 
 
 
