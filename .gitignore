@@ -1,0 +1,3 @@
+*.mjs
+*.log
+node_modules
