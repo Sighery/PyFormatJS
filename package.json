@@ -1,0 +1,28 @@
+{
+  "name": "pyformatjs",
+  "version": "0.1.0",
+  "description": "Expands JS' string prototype by adding in a format functionality, as close as possible to Python's own format functionality",
+  "main": "PyFormatJS.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo -e \"You're supposed to run scripts independently\"; exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sighery/PyFormatJS.git"
+  },
+  "keywords": [
+    "format",
+    "python"
+  ],
+  "author": "Sighery",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sighery/PyFormatJS/issues"
+  },
+  "homepage": "https://github.com/Sighery/PyFormatJS#readme"
+}
