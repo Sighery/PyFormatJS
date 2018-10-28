@@ -14,7 +14,8 @@
   },
   "scripts": {
     "test": "echo -e \"You're supposed to run scripts independently\"; exit 1",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "mocha": "mocha test/mocha/."
   },
   "repository": {
     "type": "git",
