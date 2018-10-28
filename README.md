@@ -1,4 +1,4 @@
-# PyFormatJS
+# PyFormatJS [![Build Status](https://travis-ci.com/Sighery/PyFormatJS.svg?branch=master)](https://travis-ci.com/Sighery/PyFormatJS)
 I've always liked [Python's format
 functionality](https://docs.python.org/3.4/library/string.html#format-string-syntax)
 , and always found annoying and ugly having to concatenate things manually in
