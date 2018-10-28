@@ -7,7 +7,11 @@
     "test": "test"
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "jshint": "^2.9.6",
+    "mocha": "^5.2.0"
+  },
   "scripts": {
     "test": "echo -e \"You're supposed to run scripts independently\"; exit 1"
   },
