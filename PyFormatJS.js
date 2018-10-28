@@ -56,7 +56,7 @@ String.prototype.pyformat = function(...args) {
 	}
 
 
-	return this.replace(/(\{{1,}.*?\}{1,})/g, function(match, number) {
+	return this.replace(/(\{{1,}.*?\}{1,})/g, function(match) {
 		let strippedField = match.substr(1, match.length - 2);
 
 		// If even stripped it still contains more {} inside, it means they
@@ -72,7 +72,7 @@ String.prototype.pyformat = function(...args) {
 		// Do first run setup
 		if (firstRun === true) {
 			fieldType = match === "{}" ?
-								FIELD_TYPE_AUTOMATIC : FIELD_TYPE_MANUAL;
+				FIELD_TYPE_AUTOMATIC : FIELD_TYPE_MANUAL;
 			firstRun = false;
 		}
 
