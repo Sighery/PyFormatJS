@@ -147,5 +147,5 @@ missing.
 # TODO
 
 This is just the first version. So far it does the basic replacing, but it does
-none of the formatting Python's `pyformat()` does. That will come at some point
+none of the formatting Python's `format()` does. That will come at some point
 when I get to it.
