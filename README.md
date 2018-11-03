@@ -20,6 +20,7 @@ argument in multiple places, you'd still have to provide it multiple times.
 It also had the issue of being very basic. Just replacing `{}` in a string by
 the matching argument, or not replacing it if that matching argument wasn't
 found.
+
 ---
 
 ## Contents
@@ -71,11 +72,21 @@ import('https://cdn.jsdelivr.net/gh/Sighery/PyFormatJS/PyFormatJS.js')
 However, you should note that modules support is still pretty new. It might not
 be implemented at all in your target browsers. Certain things like dynamic
 imports might also not work. For instance, as of 2018/11/03 the Mozilla
-documentation's [browsers compatibility table
-](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Browser_compatibility)
-on imports says Firefox still doesn't support dynamic imports.
+documentation's [browser compatibility
+table](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Browser_compatibility)
+on imports says Firefox doesn't yet support dynamic imports.
 
+### Module import in NodeJS
 
+You could technically use ES2015 imports on your NodeJS app as well, and import
+this that way, however, it requires certain steps beforehand, and it's just
+easier to use CommonJS' built-in approach to modules, such as this:
+
+```Javascript
+require('PyFormatJS');
+
+console.log('We can use {0} now!'.pyformat('PyFormatJS'));
+```
 
 ---
 
@@ -134,7 +145,8 @@ matched and replaced.
 
 5. Replacing with named arguments
 
-This is one of Python's implementation I quite like. On Python, you can do this:
+This is one of Python's implementation I quite like. On Python, you can do
+this:
 
 ```Python
 "This is {city}!".pyformat(city = "Sparta")
