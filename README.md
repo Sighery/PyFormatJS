@@ -20,10 +20,66 @@ argument in multiple places, you'd still have to provide it multiple times.
 It also had the issue of being very basic. Just replacing `{}` in a string by
 the matching argument, or not replacing it if that matching argument wasn't
 found.
+---
+
+## Contents
+- [Importing](#importing)
+- [Current Implementation](#current-implementation)
+- [Exceptions](#exceptions)
+- [TODO](#todo)
 
 ---
 
-# Current Implementation
+## Importing
+
+### Classic script in the browser
+
+If you're on a browser you can simply import it like a normal script into your
+website:
+
+```HTML
+<script type="text/javascript" src="PyFormatJS.js"></script>
+```
+
+And the script already runs all the code to add the `pyformat` method to the
+string prototype so once it's loaded it's ready to be used.
+
+### Module import in the browser
+
+You can also use ECMAScript2015's modules:
+
+```Javascript
+// As a top level import
+import './PyFormatJS.js';
+
+// Or as a dynamic import()
+import('https://cdn.jsdelivr.net/gh/Sighery/PyFormatJS/PyFormatJS.js')
+	.then(() => {
+		console.log('I can use promises to import {}!'.pyformat('PyFormatJS'));
+	});
+
+(async () => {
+	await import(
+		'https://cdn.jsdelivr.net/gh/Sighery/PyFormatJS/PyFormatJS.js'
+	);
+	console.log('Or even {type} if you want to get fancy.'.pyformat({
+		type: 'async/await'
+	}));
+})();
+```
+
+However, you should note that modules support is still pretty new. It might not
+be implemented at all in your target browsers. Certain things like dynamic
+imports might also not work. For instance, as of 2018/11/03 the Mozilla
+documentation's [browsers compatibility table
+](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Browser_compatibility)
+on imports says Firefox still doesn't support dynamic imports.
+
+
+
+---
+
+## Current Implementation
 
 This current version is the first step towards implementing Python's format as
 closely as possible in JavaScript. It works by expanding the JavaScript string
@@ -108,7 +164,7 @@ are some illegal things. Let's see them now.
 
 ---
 
-# Exceptions
+## Exceptions
 
 The same way I'm keeping this functionality as close as Python's one, I'm also
 trying to replicate the exact same behaviour and exceptions. To do this, I
@@ -144,7 +200,7 @@ missing.
 
 ---
 
-# TODO
+## TODO
 
 This is just the first version. So far it does the basic replacing, but it does
 none of the formatting Python's `format()` does. That will come at some point

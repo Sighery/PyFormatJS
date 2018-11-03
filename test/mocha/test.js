@@ -1,6 +1,6 @@
 /* eslint-env node, mocha */
 var assert = require('assert');
-require.main.require('PyFormatJS.js');
+require.main.require('PyFormatJS');
 
 describe('PyFormatJS', function() {
 	describe('Replacing', function() {
